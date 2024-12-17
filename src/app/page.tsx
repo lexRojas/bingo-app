@@ -2,7 +2,7 @@
 
 import styles from '@/modules/bingo.module.css'
 import { alias } from '@/components/numeros'
-import { Ref, RefObject, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 export default function Home() {
 

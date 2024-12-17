@@ -2,7 +2,7 @@
 
 import styles from '@/modules/bingo.module.css'
 import { alias } from '@/components/numeros'
-import { useRef, useState } from 'react'
+import { Ref, RefObject, useRef, useState } from 'react'
 
 export default function Home() {
 
@@ -22,36 +22,40 @@ export default function Home() {
 
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      aplicarNumero()
+    }
+  }
+  const aplicarNumero = () => {
 
     if (numero_digitado.current) {
       const { value } = numero_digitado.current
       const n = Number(value).valueOf()
+      if (n >= 1 && n <= 75) {
+        const newArray = numeroSeleccionado
+        const newArraySelected = selected
 
-      if (e.key == 'Enter') {
-        if (n >= 1 && n <= 75) {
-          const newArray = numeroSeleccionado
-          const newArraySelected = selected
+        newArraySelected[n - 1] = true
+        newArray.push(n)
 
-          newArraySelected[n - 1] = true
-          newArray.push(Number(value).valueOf())
+        setNumeroSeleccionado(newArray)
+        setNumeroAlias(n)
+        setErrorNumero(false)
+        setSelected(newArraySelected)
 
-          setNumeroSeleccionado(newArray)
-          setNumeroAlias(n)
-          setErrorNumero(false)
-          setSelected(newArraySelected)
+        const input: HTMLInputElement = numero_digitado.current
 
-          const input: HTMLInputElement = numero_digitado.current
+        input.select()
+      } else {
 
-          input.select()
-
-        } else {
-
-          setErrorNumero(true)
-        }
-
+        setErrorNumero(true)
       }
 
+
+
     }
+
+
   }
 
 
@@ -161,7 +165,7 @@ export default function Home() {
         </div>
         <div className="flex  rounded-xl md:col-start-3 bg-yellow-300 md:row-start-3">
 
-          <div className='flex flex-col m-2 mx-auto'>
+          <div className='flex flex-col m-2 mx-auto gap-2'>
 
             <label className="" htmlFor="numero">Numero:</label>
             <input className='text-center'
@@ -170,11 +174,12 @@ export default function Home() {
               id="numero"
               min={1}
               max={75}
-              defaultValue={1}
               ref={numero_digitado}
               onKeyDown={handleKeyPress}
               value={valor}
               onChange={(e) => setValor(Number(e.target.value).valueOf())} />
+
+            <button onClick={aplicarNumero} className='bg-blue-900 rounded-lg shadow-md text-white p-3' > Siguiente </button>
 
           </div>
 
